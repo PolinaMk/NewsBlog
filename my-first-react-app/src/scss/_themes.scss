@@ -1,0 +1,31 @@
+@use 'colors' as *;
+
+html[data-theme="light"] {
+    --background-color: #{$background-colour};
+    --color: #{$black};
+
+    --primary-color: #{$white};
+    --secondary-color: #{$light-gray};
+
+    --input-border-color: #{$light-gray};
+
+    --theme-background-color: #{$main-colour};
+    --theme-background-hover-color: #{$primary-colour};
+    --theme-background-icon-color: #{$white};
+    --theme-border-color: #{none};
+}
+
+html[data-theme="dark"] {
+    --background-color: #{$background-colour-dark-theme};
+    --color: #{$white};
+
+    --primary-color: #{$header-colour-dark-theme};
+    --secondary-color: #{$light-gray-dark-theme};
+
+    --input-border-color: #{$header-colour-dark-theme};
+
+    --theme-background-color: #{$header-colour-dark-theme};
+    --theme-background-hover-color: #{$white};
+    --theme-background-icon-color: #{$main-colour};
+    --theme-border-color: #{$main-colour};
+}

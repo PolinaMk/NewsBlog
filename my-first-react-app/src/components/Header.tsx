@@ -2,9 +2,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { AppStorage } from '../redux/store';
 import { logOut } from '../redux/auth/actions';
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import { useContext, useEffect, useState } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 
 export const Header: React.FC = () => {
+    const { darkTheme, toggleTheme } = useContext(ThemeContext)
 
+    // const toogleTheme = () => {
+    //     setDarkTheme(!darkTheme)
+    //     document.documentElement.classList.toggle('dark')
+    // }
+
+    useEffect(() => {
+        document.documentElement.setAttribute(
+        "data-theme",
+        darkTheme ? "dark" : "light"
+        );
+    }, [darkTheme]);
 
     return <nav className="navbar">
         <div className="container">
@@ -31,6 +46,13 @@ export const Header: React.FC = () => {
                         Create article
                     </NavLink>
                 </div>
+                <button onClick={toggleTheme} className='navbar__toggle-btn'>
+                    {darkTheme ? (
+                        <MoonIcon className='navbar__toggle-icon'/>
+                    ) : (
+                        < SunIcon className='navbar__toggle-icon'/>
+                    )}
+                </button>
             </div>
         </nav>
 }

@@ -7,10 +7,10 @@ import { divide } from "lodash";
 
 
 interface IForm {
-    imageUrl: File;
+    image_url: File;
     text: string;
     title: string;
-    newsSite: string,
+    news_site: string,
     summary: string,
 }
 
@@ -47,7 +47,7 @@ export const ArticleCreate: React.FC = () => {
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
         try {
-            createArticle({ ...data, imageUrl: file! })
+            createArticle({ ...data, image_url: file! })
             alert(`Article: ${data.title} - has been added`)
         } catch (e: any) {
             alert(e?.message)
@@ -75,8 +75,8 @@ export const ArticleCreate: React.FC = () => {
             </div>
             <div className="mb-3">
                 <label className="form-label">Lesson number *</label>
-                <input {...register("newsSite", { required: true })} className="form-control" />
-                {touchedFields.newsSite && errors.newsSite && <div className="form-text text-danger">Please fill out this field</div>}
+                <input {...register("news_site", { required: true })} className="form-control" />
+                {touchedFields.news_site && errors.news_site && <div className="form-text text-danger">Please fill out this field</div>}
             </div>
             <div className="mb-3">
                 <label className="form-label">Description *</label>

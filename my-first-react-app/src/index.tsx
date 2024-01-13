@@ -3,6 +3,7 @@ import './index.css';
 import { App } from './App';
 import { ACCESS_KEY, REFRESH_KEY, baseUrl } from './constants';
 import axios from 'axios';
+import { ThemeProvider } from './context/ThemeContext';
 
 // function redirectToLogin() {
 //     window.location.href = `/login?redirect=${encodeURIComponent(window.location.href.replace(window.location.origin, ""))}`
@@ -57,4 +58,8 @@ import axios from 'axios';
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
-root.render(<App />);
+root.render(
+    <ThemeProvider>
+        <App />
+    </ThemeProvider>
+);

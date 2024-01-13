@@ -3,40 +3,51 @@ import { ACCESS_KEY, baseUrl } from "../constants"
 
 export interface Article {
     id: number | string,
-    featured?: boolean,
     title: string,
     url?: string,
-    imageUrl: string,
-    newsSite: string,
+    image_url: string,
+    news_site: string,
     summary: string,
-    publishedAt?: string,
-    launches?: ArticleProvider[],
-    events?: ArticleProvider[]
+    published_at?: string,
+    updated_at?: string,
+    featured?: boolean,
+    launches?: LauncheProvider[],
+    events?: EventProvider[]
 }
 
-export interface ArticleProvider {
-    id: number | string,
+export interface LauncheProvider {
+    launch_id: number | string,
+    provider: string
+}
+
+export interface EventProvider {
+    event_id: number | string,
     provider: string
 }
 
 export interface ArticleProps {
-    _limit?: number,
-    _sort?: string,
-    title_contains?: string,
-    summary_contains?: string,
-    _start?: number,
-    publishedAt_gte?: string,
+    limit?: number,
+    search?: string,
+    offset?: number,
+    updated_at_gte?: string,
+}
+
+export interface getArticlesProps {
+    count: number
+    next: string,
+    previous: string,
+    results: Article[]
 }
 
 export interface ArticleCreateProps {
-    imageUrl: File,
+    image_url: File,
     title: string,
-    newsSite: string,
+    news_site: string,
     summary: string,
 }
 
-export const getArticles = async (props: ArticleProps): Promise<Article[]> => {
-    return axios.get(`${baseUrl}/v3/articles/`, {
+export const getArticles = async (props: ArticleProps): Promise<getArticlesProps> => {
+    return axios.get(`${baseUrl}/v4/articles/`, {
         headers: {
             "Content-Type": "application/json"
         },
@@ -47,7 +58,7 @@ export const getArticles = async (props: ArticleProps): Promise<Article[]> => {
 }
 
 export const getArticleById = async (id: number): Promise<Article> => {
-    return axios.get(`${baseUrl}/v3/articles/${id}`, {
+    return axios.get(`${baseUrl}/v4/articles/${id}`, {
         headers: {
             "Content-Type": "application/json"
         },

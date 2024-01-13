@@ -13,8 +13,8 @@ if (now.getMonth() < 10) {
 }
 const day = now.getDate();
 let currentDay = `${year}-${month}-${day}`;
-let currentMonth = `${year}-${month}`;
-let lastSevenDays = `${currentDay} - (${year} - ${month} - 7)`
+let currentMonth = `${year}-${month}-${'01'}`;
+let currentYear = `${year}-${'01'}-${'01'}`
 
 
 export const Articles: React.FC = () => {
@@ -26,7 +26,8 @@ export const Articles: React.FC = () => {
     const [limit, setLimit] = useState(10)
     const [offset, setOffset] = useState(0)
     const [total, setTotal] = useState(0)
-    const [currentDate, setCurrentDate] = useState<any>(year)
+    const [next, setNext] = useState('')
+    const [currentDate, setCurrentDate] = useState<any>(currentYear)
 
 
     const totalPage = useMemo(() => {
@@ -38,9 +39,10 @@ export const Articles: React.FC = () => {
     }, [offset, limit])
 
     const debouncedHandleSearch = useCallback(debounce(async (limitValue, inputValue, offset, currentDate) => {
-        const articlesResp = await getArticles({ _limit: limitValue, title_contains: inputValue, _start: offset, publishedAt_gte: currentDate})
-        setTotal(articlesResp.length)
-        setArticles(articlesResp)
+        const articlesResp = await getArticles({ limit: limitValue, search: inputValue, offset: offset, updated_at_gte: currentDate})
+        setTotal(articlesResp.count)
+        setArticles(articlesResp.results)
+        setNext(articlesResp.next)
     }, 450), [])
 
     useEffect(() => {
@@ -64,7 +66,7 @@ export const Articles: React.FC = () => {
     }
 
     const onNextClick = () => {
-        //offset < limit * (totalPage - 1) && setOffset(offset + limit)
+        offset < limit * (totalPage - 1) && setOffset(offset + limit)
         setOffset(offset + limit)
     }
 
@@ -82,7 +84,7 @@ export const Articles: React.FC = () => {
     }
 
     const onCurrentYear = () => {
-        setCurrentDate(year)
+        setCurrentDate(currentYear)
     }
 
 
@@ -116,11 +118,11 @@ export const Articles: React.FC = () => {
                     </div>
 
                 </div>
-                <select className="article__sort-order form-select" aria-label="Default select example" value={selectValue} onChange={(e) => setSelectValue(e.target.value)}>
+                {/* <select className="article__sort-order form-select" aria-label="Default select example" value={selectValue} onChange={(e) => setSelectValue(e.target.value)}>
                     <option selected>Sort:</option>
                     <option value="text">Title (A-Z)</option>
                     <option value="data">Title (Z-A)</option>
-                </select>
+                </select> */}
             </div>
         </div>
 
@@ -132,22 +134,22 @@ export const Articles: React.FC = () => {
 
         <div className="article__pagination">
             <button className="article__pagination-btn" disabled={currentPage === 1} onClick={onPreviousClick}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="article__pagination-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     {currentPage === 1 &&
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.7099 5.2924C10.8999 5.4924 10.9999 5.7424 10.9999 6.0024C10.9999 6.2624 10.8999 6.5124 10.7099 6.7124L6.40994 11.0024L19.9999 11.0024C20.5499 11.0024 20.9999 11.4524 20.9999 12.0024C20.9999 12.5524 20.5499 13.0024 19.9999 13.0024L6.40994 13.0024L10.7099 17.2924C11.0999 17.6824 11.0999 18.3224 10.7099 18.7124C10.3199 19.1024 9.67994 19.1024 9.28994 18.7124L3.28994 12.7124C3.19994 12.6224 3.12994 12.5124 3.07994 12.3924C3.05994 12.3424 3.03994 12.3024 3.03994 12.2524C2.98994 12.0924 2.98994 11.9124 3.03994 11.7524C3.03994 11.7024 3.05994 11.6624 3.07994 11.6124C3.12994 11.4924 3.19994 11.3824 3.28994 11.2924L9.28994 5.2924C9.67994 4.9024 10.3199 4.9024 10.7099 5.2924Z" fill="#313037" fill-opacity="0.3" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.7099 5.2924C10.8999 5.4924 10.9999 5.7424 10.9999 6.0024C10.9999 6.2624 10.8999 6.5124 10.7099 6.7124L6.40994 11.0024L19.9999 11.0024C20.5499 11.0024 20.9999 11.4524 20.9999 12.0024C20.9999 12.5524 20.5499 13.0024 19.9999 13.0024L6.40994 13.0024L10.7099 17.2924C11.0999 17.6824 11.0999 18.3224 10.7099 18.7124C10.3199 19.1024 9.67994 19.1024 9.28994 18.7124L3.28994 12.7124C3.19994 12.6224 3.12994 12.5124 3.07994 12.3924C3.05994 12.3424 3.03994 12.3024 3.03994 12.2524C2.98994 12.0924 2.98994 11.9124 3.03994 11.7524C3.03994 11.7024 3.05994 11.6624 3.07994 11.6124C3.12994 11.4924 3.19994 11.3824 3.28994 11.2924L9.28994 5.2924C9.67994 4.9024 10.3199 4.9024 10.7099 5.2924Z" fill-opacity="0.2" />
                     }
                     {currentPage > 1 &&
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.7099 5.2924C10.8999 5.4924 10.9999 5.7424 10.9999 6.0024C10.9999 6.2624 10.8999 6.5124 10.7099 6.7124L6.40994 11.0024L19.9999 11.0024C20.5499 11.0024 20.9999 11.4524 20.9999 12.0024C20.9999 12.5524 20.5499 13.0024 19.9999 13.0024L6.40994 13.0024L10.7099 17.2924C11.0999 17.6824 11.0999 18.3224 10.7099 18.7124C10.3199 19.1024 9.67994 19.1024 9.28994 18.7124L3.28994 12.7124C3.19994 12.6224 3.12994 12.5124 3.07994 12.3924C3.05994 12.3424 3.03994 12.3024 3.03994 12.2524C2.98994 12.0924 2.98994 11.9124 3.03994 11.7524C3.03994 11.7024 3.05994 11.6624 3.07994 11.6124C3.12994 11.4924 3.19994 11.3824 3.28994 11.2924L9.28994 5.2924C9.67994 4.9024 10.3199 4.9024 10.7099 5.2924Z" fill="#313037" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.7099 5.2924C10.8999 5.4924 10.9999 5.7424 10.9999 6.0024C10.9999 6.2624 10.8999 6.5124 10.7099 6.7124L6.40994 11.0024L19.9999 11.0024C20.5499 11.0024 20.9999 11.4524 20.9999 12.0024C20.9999 12.5524 20.5499 13.0024 19.9999 13.0024L6.40994 13.0024L10.7099 17.2924C11.0999 17.6824 11.0999 18.3224 10.7099 18.7124C10.3199 19.1024 9.67994 19.1024 9.28994 18.7124L3.28994 12.7124C3.19994 12.6224 3.12994 12.5124 3.07994 12.3924C3.05994 12.3424 3.03994 12.3024 3.03994 12.2524C2.98994 12.0924 2.98994 11.9124 3.03994 11.7524C3.03994 11.7024 3.05994 11.6624 3.07994 11.6124C3.12994 11.4924 3.19994 11.3824 3.28994 11.2924L9.28994 5.2924C9.67994 4.9024 10.3199 4.9024 10.7099 5.2924Z"/>
                     }
                 </svg>
                 Prev
             </button>
-            {/* <div>
+            <div>
                 <span>Page: {currentPage} of {totalPage}</span>
             </div>
             <div>
                 <span>Total: {total}</span>
-            </div> */}
+            </div>
 
            <select className="article__pagination-select" value={limit} onChange={e => setLimit(+e.target.value) }>
                 <option selected>Select ordering</option>
@@ -158,10 +160,11 @@ export const Articles: React.FC = () => {
                 <option value="50">50</option>
             </select>
 
-            <button className="article__pagination-btn" disabled={currentPage === total} onClick={onNextClick} type="button">
+            <button className="article__pagination-btn" disabled={next === null} onClick={onNextClick} type="button">
                 Next
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.2901 18.7076C13.1001 18.5076 13.0001 18.2576 13.0001 17.9976C13.0001 17.7376 13.1001 17.4876 13.2901 17.2876L17.5901 12.9976L4.00006 12.9976C3.45006 12.9976 3.00006 12.5476 3.00006 11.9976C3.00006 11.4476 3.45006 10.9976 4.00006 10.9976L17.5901 10.9976L13.2901 6.7076C12.9001 6.3176 12.9001 5.6776 13.2901 5.2876C13.6801 4.8976 14.3201 4.8976 14.7101 5.2876L20.7101 11.2876C20.8001 11.3776 20.8701 11.4876 20.9201 11.6076C20.9401 11.6576 20.9601 11.6976 20.9601 11.7476C21.0101 11.9076 21.0101 12.0876 20.9601 12.2476C20.9601 12.2976 20.9401 12.3376 20.9201 12.3876C20.8701 12.5076 20.8001 12.6176 20.7101 12.7076L14.7101 18.7076C14.3201 19.0976 13.6801 19.0976 13.2901 18.7076Z" fill="#313037"/>
+                <svg className="article__pagination-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {next && <path fill-rule="evenodd" clip-rule="evenodd" d="M13.2901 18.7076C13.1001 18.5076 13.0001 18.2576 13.0001 17.9976C13.0001 17.7376 13.1001 17.4876 13.2901 17.2876L17.5901 12.9976L4.00006 12.9976C3.45006 12.9976 3.00006 12.5476 3.00006 11.9976C3.00006 11.4476 3.45006 10.9976 4.00006 10.9976L17.5901 10.9976L13.2901 6.7076C12.9001 6.3176 12.9001 5.6776 13.2901 5.2876C13.6801 4.8976 14.3201 4.8976 14.7101 5.2876L20.7101 11.2876C20.8001 11.3776 20.8701 11.4876 20.9201 11.6076C20.9401 11.6576 20.9601 11.6976 20.9601 11.7476C21.0101 11.9076 21.0101 12.0876 20.9601 12.2476C20.9601 12.2976 20.9401 12.3376 20.9201 12.3876C20.8701 12.5076 20.8001 12.6176 20.7101 12.7076L14.7101 18.7076C14.3201 19.0976 13.6801 19.0976 13.2901 18.7076Z" />}
+                    {next === null && <path fill-rule="evenodd" clip-rule="evenodd" d="M13.2901 18.7076C13.1001 18.5076 13.0001 18.2576 13.0001 17.9976C13.0001 17.7376 13.1001 17.4876 13.2901 17.2876L17.5901 12.9976L4.00006 12.9976C3.45006 12.9976 3.00006 12.5476 3.00006 11.9976C3.00006 11.4476 3.45006 10.9976 4.00006 10.9976L17.5901 10.9976L13.2901 6.7076C12.9001 6.3176 12.9001 5.6776 13.2901 5.2876C13.6801 4.8976 14.3201 4.8976 14.7101 5.2876L20.7101 11.2876C20.8001 11.3776 20.8701 11.4876 20.9201 11.6076C20.9401 11.6576 20.9601 11.6976 20.9601 11.7476C21.0101 11.9076 21.0101 12.0876 20.9601 12.2476C20.9601 12.2976 20.9401 12.3376 20.9201 12.3876C20.8701 12.5076 20.8001 12.6176 20.7101 12.7076L14.7101 18.7076C14.3201 19.0976 13.6801 19.0976 13.2901 18.7076Z" fill-opacity="0.2"/>}
                 </svg>
             </button>
         </div>
