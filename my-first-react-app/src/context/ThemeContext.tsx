@@ -1,12 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
+import { BoltIcon } from "@heroicons/react/24/outline";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface ContextProps {
-  darkTheme: boolean;
+  //darkTheme: boolean;
+  darkTheme: string;
   toggleTheme: () => void;
 }
 
 export const ThemeContext = createContext<ContextProps>({
-  darkTheme: false,
+  //darkTheme: false,
+  darkTheme: 'light',
   toggleTheme: () => {},
 });
 
@@ -19,11 +22,32 @@ interface Props {
 }
 
 export const ThemeProvider: React.FC<Props> = ({ children }) => {
-  const [darkTheme, setDarkTheme] = useState(false);
+  //const [darkTheme, setDarkTheme] = useState(false);
+  const [darkTheme, setDarkTheme] = useState('light');
+
+  const localStorage = window.localStorage;
+
+  useEffect(() => {
+    const savedThemeLocal = localStorage.getItem("data-theme");
+
+    if (!!savedThemeLocal) {
+      setDarkTheme(savedThemeLocal);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("data-theme", darkTheme );
+  }, [darkTheme]);
 
   const toggleThemeHandler = () => {
-    setDarkTheme((prevState) => !prevState);
-    //document.documentElement.classList.toggle('dark')
+    //setDarkTheme((prevState) => !prevState);
+
+    if (darkTheme === 'light') {
+      setDarkTheme('dark')
+    } else {
+      setDarkTheme('light')
+    }
+
   };
 
   return (
@@ -37,5 +61,3 @@ export const ThemeProvider: React.FC<Props> = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-
-//export const useTheme = () => useContext()

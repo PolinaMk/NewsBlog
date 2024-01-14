@@ -28,6 +28,7 @@ export const Articles: React.FC = () => {
     const [total, setTotal] = useState(0)
     const [next, setNext] = useState('')
     const [currentDate, setCurrentDate] = useState<any>(currentYear)
+    const [currentDateValue, setCurrentDateValue] = useState<any>('year')
 
 
     const totalPage = useMemo(() => {
@@ -75,16 +76,22 @@ export const Articles: React.FC = () => {
         setOffset(0)
     }
 
-    const onCurrentDay = () => {
+    const onCurrentDay = (value: string) => {
         setCurrentDate(currentDay)
+        setCurrentDateValue(value)
+        setOffset(0)
     }
 
-    const onCurrentMonth = () => {
+    const onCurrentMonth = (value: string) => {
         setCurrentDate(currentMonth)
+        setCurrentDateValue(value)
+        setOffset(0)
     }
 
-    const onCurrentYear = () => {
+    const onCurrentYear = (value: string) => {
         setCurrentDate(currentYear)
+        setCurrentDateValue(value)
+        setOffset(0)
     }
 
 
@@ -98,31 +105,26 @@ export const Articles: React.FC = () => {
 
         <div className="article__sort-block">
             <div className="article__search-block mb-3">
-                <input type="text" className="article__search-input form-control" placeholder="Search by title" value={inputValue} onChange={(e) => onSearchChange(e.target.value)}/>
+                <input type="text" className="article__search-input form-control" placeholder="Search" value={inputValue} onChange={(e) => onSearchChange(e.target.value)}/>
             </div>
             <div className="article__sort">
                 <div className="article__sort-time">
-                    <div className="article__radio-btn">
-                        <input type="radio" name="topping" value='day' id="day" onClick={onCurrentDay}/>
+                    <div className={`article__radio-btn ${currentDateValue === 'day' ? 'article__radio-btn-active' : ''}`}>
+                        <input type="radio" name="topping" value='day' id="day" onClick={() => onCurrentDay('day')}/>
                         <label htmlFor="day">Current day</label>
                     </div>
 
-                    <div className="article__radio-btn">
-                        <input type="radio" name="topping" value="month" id="month" onClick={onCurrentMonth}/>
+                    <div className={`article__radio-btn ${currentDateValue === 'month' ? 'article__radio-btn-active' : ''}`}>
+                        <input type="radio" name="topping" value="month" id="month" onClick={() => onCurrentMonth('month')}/>
                         <label htmlFor="month">Current month</label>
                     </div>
 
-                    <div className="article__radio-btn">
-                        <input type="radio" name="topping" value='year' id="year" onClick={onCurrentYear}/>
+                    <div className={`article__radio-btn ${currentDateValue === 'year' ? 'article__radio-btn-active' : ''}`}>
+                        <input type="radio" name="topping" value='year' id="year" onClick={() => onCurrentYear('year')}/>
                         <label htmlFor="year">Current year</label>
                     </div>
 
                 </div>
-                {/* <select className="article__sort-order form-select" aria-label="Default select example" value={selectValue} onChange={(e) => setSelectValue(e.target.value)}>
-                    <option selected>Sort:</option>
-                    <option value="text">Title (A-Z)</option>
-                    <option value="data">Title (Z-A)</option>
-                </select> */}
             </div>
         </div>
 
@@ -145,10 +147,10 @@ export const Articles: React.FC = () => {
                 Prev
             </button>
             <div>
-                <span>Page: {currentPage} of {totalPage}</span>
+                <span className="article__pagination-number">Page: {currentPage} of {totalPage}</span>
             </div>
             <div>
-                <span>Total: {total}</span>
+                <span className="article__pagination-number">Total: {total}</span>
             </div>
 
            <select className="article__pagination-select" value={limit} onChange={e => setLimit(+e.target.value) }>

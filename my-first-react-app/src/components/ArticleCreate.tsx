@@ -8,7 +8,7 @@ import { divide } from "lodash";
 
 interface IForm {
     image_url: File;
-    text: string;
+    url: string;
     title: string;
     news_site: string,
     summary: string,
@@ -54,14 +54,14 @@ export const ArticleCreate: React.FC = () => {
         }
     }
 
-    return <div>
-        <h1>Create new article</h1>
-        <form className="needs-validation" onSubmit={handleSubmit(onSubmit)}>
+    return <div className='createArticle'>
+        <h2 className="createArticle__title article__title">Create new article</h2>
+        <form className="createArticle__form needs-validation" onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
                 <label className="form-label">Image *</label>
                 <input className="form-control" type="file" accept=".ipeg,.jpg,.png" onChange={onFileChange} />
                 {image && <div className='input__img-wrapper'><img className="input__img" src={image} alt="" /></div>}
-                {touchedFields.text && errors.text && <div className="form-text text-danger">Please add image</div>}
+                {touchedFields.image_url && errors.image_url && <div className="form-text text-danger">Please add image</div>}
             </div>
             <div className="mb-3">
                 <label className="form-label">Title *</label>
@@ -69,17 +69,17 @@ export const ArticleCreate: React.FC = () => {
                 {touchedFields.title && errors.title && <div className="form-text text-danger">Please fill out this field</div>}
             </div>
             <div className="mb-3">
-                <label className="form-label">Text *</label>
-                <input {...register("text", { required: true })} className="form-control" />
-                {touchedFields.text && errors.text && <div className="form-text text-danger">Please fill out this field</div>}
+                <label className="form-label">News url *</label>
+                <input {...register("url", { required: true })} className="form-control" />
+                {touchedFields.url && errors.url && <div className="form-text text-danger">Please fill out this field</div>}
             </div>
             <div className="mb-3">
-                <label className="form-label">Lesson number *</label>
+                <label className="form-label">News topic *</label>
                 <input {...register("news_site", { required: true })} className="form-control" />
                 {touchedFields.news_site && errors.news_site && <div className="form-text text-danger">Please fill out this field</div>}
             </div>
             <div className="mb-3">
-                <label className="form-label">Description *</label>
+                <label className="form-label">Summary *</label>
                 <textarea {...register("summary", { required: true })} className="form-control" />
                 {touchedFields.summary && errors.summary && <div className="form-text text-danger">Please fill out this field</div>}
             </div>

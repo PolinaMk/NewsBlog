@@ -252,7 +252,7 @@ body {
         text-align: center;
         padding: 13px 15px;
         line-height: 34px;
-        border: 1px solid var(--input-border-color);;
+        border: 1px solid var(--input-border-color);
         color: var(--color);
         border-radius: 6px;
         user-select: none;
@@ -268,7 +268,6 @@ body {
     &__radio-btn input[type=radio]:checked+label {
         transition: all 0.3s linear;
         background: $main-colour;
-        border: 1px solid $main-colour;
         color: #FFF;
     }
 
@@ -295,6 +294,14 @@ body {
             outline: 0;
             box-shadow: 0;
         }
+    }
+
+    &__radio-btn-active label {
+        transition: all 0.3s linear;
+        background: $main-colour;
+        border: 1px solid $main-colour;
+        color: #FFF;
+        border-radius: 6px;
     }
 
     &__wrapper {
@@ -381,6 +388,10 @@ body {
         border-radius: 16px;
         padding: 4px 10px;
     }
+
+    &__pagination-number {
+        color: var(--color);
+    }
 }
 
 
@@ -464,6 +475,17 @@ body {
     &__svg {
         height: 24px;
         width: 24px;
+    }
+}
+
+
+/*Create Article
+===========================*/
+.createArticle {
+    margin-bottom: 72px;
+
+    &__title {
+        margin-bottom: 64px;
     }
 }
 
