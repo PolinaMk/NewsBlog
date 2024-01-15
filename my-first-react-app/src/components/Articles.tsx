@@ -27,8 +27,8 @@ export const Articles: React.FC = () => {
     const [offset, setOffset] = useState(0)
     const [total, setTotal] = useState(0)
     const [next, setNext] = useState('')
-    const [currentDate, setCurrentDate] = useState<any>(currentYear)
-    const [currentDateValue, setCurrentDateValue] = useState<any>('year')
+    const [currentDate, setCurrentDate] = useState<any>('')
+    const [currentDateValue, setCurrentDateValue] = useState<any>('allNews')
 
 
     const totalPage = useMemo(() => {
@@ -94,6 +94,12 @@ export const Articles: React.FC = () => {
         setOffset(0)
     }
 
+    const onAllNews = (value: string) => {
+        setCurrentDate('')
+        setCurrentDateValue(value)
+        setOffset(0)
+    }
+
 
     return <div className="article">
         <div className="article__header">
@@ -122,6 +128,11 @@ export const Articles: React.FC = () => {
                     <div className={`article__radio-btn ${currentDateValue === 'year' ? 'article__radio-btn-active' : ''}`}>
                         <input type="radio" name="topping" value='year' id="year" onClick={() => onCurrentYear('year')}/>
                         <label htmlFor="year">Current year</label>
+                    </div>
+
+                    <div className={`article__radio-btn ${currentDateValue === 'allNews' ? 'article__radio-btn-active' : ''}`}>
+                        <input type="radio" name="topping" value='allNews' id="allNews" onClick={() => onAllNews('allNews')}/>
+                        <label htmlFor="allNews">All news</label>
                     </div>
 
                 </div>

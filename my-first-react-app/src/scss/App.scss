@@ -487,6 +487,124 @@ body {
     &__title {
         margin-bottom: 64px;
     }
+
+    &__field {
+        margin-bottom: 25px;
+    }
+
+    &__field-title,
+    &__field-required {
+        font-size: 16px;
+        line-height: 23px;
+        color: var(--color);
+    }
+
+    &__field-title {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+
+    &__field-required {
+        color: red;
+    }
+
+    &__required,
+    &__relevant {
+        transition: all 0.3s linear;
+        background-color: rgb(255 230 230);
+        display: inline-block;
+        color: red;
+        font-size: 14px;
+        border-radius: 6px;
+        padding: 3px 16px;
+    }
+
+    &__relevant {
+        color: $main-colour;
+        background: rgb(171, 223, 255);
+    }
+
+    &__required-svg,
+    &__relevant-svg {
+        fill: red;
+        width: 16px;
+        height: 16px;
+        margin-right: 10px;
+    }
+
+    &__relevant-svg {
+        fill: $main-colour;
+    }
+
+    &__required-wrapper {
+        display: flex;
+        column-gap: 20px;
+    }
+
+    &__search-input_red {
+        border: 1px solid red;
+    }
+
+    &__btn {
+        background: $main-colour;
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: none;
+        font-size: 16px;
+        color: #fff;
+        transition: all 0.3s linear;
+
+        &:hover,
+        &:active {
+            background: $primary-colour;
+            transition: all 0.3s linear;
+        }
+    }
+
+    &__field-file {
+        position: relative;
+    }
+
+    &__file-select {
+        position: relative;
+        z-index: 1;
+        opacity: 0;
+        width: 150px;
+    }
+
+    &__field-file_btn {
+        position: absolute;
+        top: 40px;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 16px;
+        color: $main-colour;
+        border: 1px solid $main-colour;
+        transition: all 0.3s linear;
+
+        &:hover,
+        &:active {
+            color: $primary-colour;
+            border: 1px solid $primary-colour;
+            transition: all 0.3s linear;
+        }
+    }
+
+    &__img-wrapper {
+        max-width: 350px;
+        margin-top: 20px;
+    }
+
+    &__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+textarea.form-control {
+    min-height: 130px;
 }
 
 

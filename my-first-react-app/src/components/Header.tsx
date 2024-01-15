@@ -1,9 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
-import { AppStorage } from '../redux/store';
-import { logOut } from '../redux/auth/actions';
+import { NavLink } from 'react-router-dom';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 
 export const Header: React.FC = () => {

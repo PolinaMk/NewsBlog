@@ -69,7 +69,7 @@ export const getArticleById = async (id: number): Promise<Article> => {
 }
 
 export const createArticle = async (props: ArticleCreateProps): Promise<Article> => {
-    return axios.post(`${baseUrl}/v3/articles/`, {
+    return axios.post(`${baseUrl}/v4/articles/`, {
         ...props,
         id: 7
     },{
