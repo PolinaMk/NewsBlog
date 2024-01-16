@@ -1,15 +1,24 @@
 import { NavLink } from 'react-router-dom';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
+
 
 export const Header: React.FC = () => {
     const { darkTheme, toggleTheme } = useContext(ThemeContext)
+    const [burgerStatus, setBurgerStatus] = useState(false)
+
+    const openBurger = () => {
+        setBurgerStatus(true)
+    }
+
+    const closeBurger = () => {
+        setBurgerStatus(false)
+    }
 
     useEffect(() => {
         document.documentElement.setAttribute(
         "data-theme",
-        //darkTheme ? "dark" : "light"
         darkTheme === 'dark' ? "dark" : "light"
         );
     }, [darkTheme]);
@@ -29,13 +38,13 @@ export const Header: React.FC = () => {
                     </svg>
                 </NavLink>
                 <div className='navbar__links'>
-                    <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} to='/'>
+                    <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/'>
                         Main
                     </NavLink>
-                    <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} to='/articles'>
+                    <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/articles'>
                         Articles
                     </NavLink>
-                     <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} to='/create_article'>
+                     <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/create_article'>
                         Create article
                     </NavLink>
                 </div>
@@ -46,6 +55,32 @@ export const Header: React.FC = () => {
                         < SunIcon className='navbar__toggle-icon'/>
                     )}
                 </button>
+
+                <svg onClick={openBurger} className='navbar__burger' width="47" height="47" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path className='navbar__burger_icon-line' d="M2.91016 5.71417H13.4124" stroke="black" stroke-width="1.00189" stroke-miterlimit="10" stroke-linecap="round"/>
+                    <path className='navbar__burger_icon-line' d="M2.91016 8.96527H13.4124" stroke="black" stroke-width="1.00189" stroke-miterlimit="10" stroke-linecap="round"/>
+                    <path className='navbar__burger_icon-line' d="M2.91016 12.2155H13.4124" stroke="black" stroke-width="1.00189" stroke-miterlimit="10" stroke-linecap="round"/>
+                </svg>
+
+                <div className={`navbar__burger-menu ${burgerStatus ? 'navbar__burger__active' : ''}`}>
+                    <svg className='navbar__burger-close' onClick={closeBurger} width="47" height="47" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path className='navbar__burger_icon-line' d="M11.6697 11.7135L4.66821 4.71194" stroke="black" stroke-width="1.00189" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path className='navbar__burger_icon-line' d="M11.6697 4.71194L4.66821 11.7135" stroke="black" stroke-width="1.00189" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div className='navbar__burger-links'>
+                        <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/' onClick={closeBurger}>
+                            Main
+                        </NavLink>
+                        <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/articles' onClick={closeBurger}>
+                            Articles
+                        </NavLink>
+                        <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/create_article' onClick={closeBurger}>
+                            Create article
+                        </NavLink>
+                    </div>
+                </div>
+                {/* <div className={`navbar__burger-overlay ${burgerStatus ? 'navbar__burger__active' : ''}`} onClick={closeBurger}></div> */}
+
             </div>
         </nav>
 }

@@ -27,7 +27,7 @@ export const Articles: React.FC = () => {
     const [offset, setOffset] = useState(0)
     const [total, setTotal] = useState(0)
     const [next, setNext] = useState('')
-    const [currentDate, setCurrentDate] = useState<any>('')
+    const [currentDate, setCurrentDate] = useState<any>(currentYear)
     const [currentDateValue, setCurrentDateValue] = useState<any>('allNews')
 
 
@@ -113,29 +113,27 @@ export const Articles: React.FC = () => {
             <div className="article__search-block mb-3">
                 <input type="text" className="article__search-input form-control" placeholder="Search" value={inputValue} onChange={(e) => onSearchChange(e.target.value)}/>
             </div>
-            <div className="article__sort">
-                <div className="article__sort-time">
-                    <div className={`article__radio-btn ${currentDateValue === 'day' ? 'article__radio-btn-active' : ''}`}>
-                        <input type="radio" name="topping" value='day' id="day" onClick={() => onCurrentDay('day')}/>
-                        <label htmlFor="day">Current day</label>
-                    </div>
-
-                    <div className={`article__radio-btn ${currentDateValue === 'month' ? 'article__radio-btn-active' : ''}`}>
-                        <input type="radio" name="topping" value="month" id="month" onClick={() => onCurrentMonth('month')}/>
-                        <label htmlFor="month">Current month</label>
-                    </div>
-
-                    <div className={`article__radio-btn ${currentDateValue === 'year' ? 'article__radio-btn-active' : ''}`}>
-                        <input type="radio" name="topping" value='year' id="year" onClick={() => onCurrentYear('year')}/>
-                        <label htmlFor="year">Current year</label>
-                    </div>
-
-                    <div className={`article__radio-btn ${currentDateValue === 'allNews' ? 'article__radio-btn-active' : ''}`}>
-                        <input type="radio" name="topping" value='allNews' id="allNews" onClick={() => onAllNews('allNews')}/>
-                        <label htmlFor="allNews">All news</label>
-                    </div>
-
+            <div className="article__sort-time">
+                <div className={`article__radio-btn ${currentDateValue === 'day' ? 'article__radio-btn-active' : ''}`}>
+                    <input type="radio" name="topping" value='day' id="day" onClick={() => onCurrentDay('day')}/>
+                    <label htmlFor="day">Current day</label>
                 </div>
+
+                <div className={`article__radio-btn ${currentDateValue === 'month' ? 'article__radio-btn-active' : ''}`}>
+                    <input type="radio" name="topping" value="month" id="month" onClick={() => onCurrentMonth('month')}/>
+                    <label htmlFor="month">Current month</label>
+                </div>
+
+                <div className={`article__radio-btn ${currentDateValue === 'year' ? 'article__radio-btn-active' : ''}`}>
+                    <input type="radio" name="topping" value='year' id="year" onClick={() => onCurrentYear('year')}/>
+                    <label htmlFor="year">Current year</label>
+                </div>
+
+                <div className={`article__radio-btn ${currentDateValue === 'allNews' ? 'article__radio-btn-active' : ''}`}>
+                    <input type="radio" name="topping" value='allNews' id="allNews" onClick={() => onAllNews('allNews')}/>
+                    <label htmlFor="allNews">All news</label>
+                </div>
+
             </div>
         </div>
 
@@ -157,10 +155,10 @@ export const Articles: React.FC = () => {
                 </svg>
                 Prev
             </button>
-            <div>
+            <div className="article__pagination_page-info">
                 <span className="article__pagination-number">Page: {currentPage} of {totalPage}</span>
             </div>
-            <div>
+            <div className="article__pagination_total-info">
                 <span className="article__pagination-number">Total: {total}</span>
             </div>
 
