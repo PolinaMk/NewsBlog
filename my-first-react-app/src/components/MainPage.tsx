@@ -1,4 +1,5 @@
 import ReactElement from '../assets/image/mobileNews.png';
+import { Weather } from './Weather';
 
 export const MainPage: React.FC = () => {
     return <div className="main-block">
@@ -13,5 +14,6 @@ export const MainPage: React.FC = () => {
                 </div>
             </div>
         </section>
+        <Weather></Weather>
     </div>
 }

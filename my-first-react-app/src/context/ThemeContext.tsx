@@ -1,14 +1,11 @@
-import { BoltIcon } from "@heroicons/react/24/outline";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 interface ContextProps {
-  //darkTheme: boolean;
   darkTheme: string;
   toggleTheme: () => void;
 }
 
 export const ThemeContext = createContext<ContextProps>({
-  //darkTheme: false,
   darkTheme: 'light',
   toggleTheme: () => {},
 });
@@ -22,7 +19,6 @@ interface Props {
 }
 
 export const ThemeProvider: React.FC<Props> = ({ children }) => {
-  //const [darkTheme, setDarkTheme] = useState(false);
   const [darkTheme, setDarkTheme] = useState('light');
 
   const localStorage = window.localStorage;
@@ -40,7 +36,6 @@ export const ThemeProvider: React.FC<Props> = ({ children }) => {
   }, [darkTheme]);
 
   const toggleThemeHandler = () => {
-    //setDarkTheme((prevState) => !prevState);
 
     if (darkTheme === 'light') {
       setDarkTheme('dark')

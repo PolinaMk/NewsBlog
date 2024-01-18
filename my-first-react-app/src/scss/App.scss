@@ -190,7 +190,7 @@ body {
 /*Main page
 ===========================*/
 .promo {
-    margin-bottom: 200px;
+    margin-bottom: 140px;
 
     &__wrapper {
         //background: #FFFFFF;
@@ -199,6 +199,14 @@ body {
         padding: 131px 0 62px 110px;
         position: relative;
         box-shadow: 0px 13px 40px 3px rgba(0, 0, 0, 0.04);
+
+        @media (max-width: 630px) {
+            padding: 131px 0 62px 80px;
+        }
+
+        @media (max-width: 400px) {
+            padding: 60px 0 62px 40px;
+        }
     }
 
     &__title {
@@ -215,6 +223,16 @@ body {
             font-size: 80px;
             line-height: 86px;
         }
+
+        @media (max-width: 630px) {
+            font-size: 50px;
+            line-height: 60px;
+        }
+
+        @media (max-width: 500px) {
+            font-size: 40px;
+            line-height: 50px;
+        }
     }
 
     &__phone-wrapper {
@@ -225,6 +243,16 @@ body {
         max-width: 366px;
         position: absolute;
         top: 600px;
+
+        @media (max-width: 630px) {
+            top: 440px;
+            max-width: 250px;
+        }
+
+        @media (max-width: 400px) {
+            top: 400px;
+            max-width: 185px;
+        }
     }
 
     &__phone-image {
@@ -239,6 +267,153 @@ body {
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+
+        @media (max-width: 630px) {
+            height: 920px;
+        }
+
+        @media (max-width: 400px) {
+            height: 750px;
+        }
+    }
+}
+
+
+/*Weather page
+===========================*/
+.weather {
+    margin-bottom: 200px;
+
+    &__header {
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__title {
+        @media (max-width: 1020px) {
+            font-size: 80px;
+            line-height: 86px;
+        }
+    
+        @media (max-width: 630px) {
+            font-size: 50px;
+            line-height: 60px;
+        }
+    
+        @media (max-width: 500px) {
+            font-size: 40px;
+            line-height: 50px;
+        }
+    }
+
+    &__img-wrapper {
+        width: 90px;
+    }
+
+    &__img {
+        width: 100%;
+    }
+
+    &__subtitle {
+        font-size: 24px;
+        margin-bottom: 30px;
+        color: var(--color);
+    }
+
+    &__form {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        column-gap: 15px;
+        margin-bottom: 40px;
+    }
+
+    &__form-input {
+        border-radius: 6px 0 0 6px;
+        border-right: none;
+    }
+
+    &__form-bth {
+        padding: 10px 20px;
+        border-radius: 0 6px 6px 0;
+        font-size: 16px;
+        color: #2F90FC;
+        border: 1px solid #2F90FC;
+        transition: all 0.3s linear;
+        background: var(--background-color);
+        transition: all 0.3s linear;
+
+        &:hover,
+        &:active {
+            transition: all 0.3s linear;
+            background: $main-colour;
+            color: #FFF;
+        }
+    }
+
+    &__wrapper {
+        padding: 60px;
+    }
+
+    &__main-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        column-gap: 30px;
+        row-gap: 30px;
+        margin-bottom: 60px;
+        color: var(--color);
+    }
+
+    &__temp {
+        text-transform: capitalize;
+        font-size: 40px;
+        text-align: center;
+        color: var(--color);
+    }
+
+    &__img-wrapper__city {
+        margin: 0 auto;
+    }
+
+    &__city-name {
+        text-transform: capitalize;
+        font-size: 28px;
+        line-height: 38px;
+        text-align: center;
+        margin-bottom: 60px;
+        color: $main-colour;
+        font-weight: 700;
+    }
+
+    &__addition-info_wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        text-align: center;
+        gap: 40px;
+        font-size: 20px;
+        color: var(--color);
+    }
+
+    &__addition-info {
+        font-size: 24px;
+        line-height: 34px;
+        text-align: center;
+        margin-bottom: 30px;
+        color: var(--color);
+    }
+
+    &__addition-info_svg-wrapper {
+        margin-bottom: 10px;
+    }
+
+    &__addition-info_text {
+        margin-left: 10px;
+    }
+
+    &__no-result {
+        margin-bottom: 0;
     }
 }
 
@@ -262,6 +437,21 @@ body {
         line-height: 80px;
         //color: $black;
         color: var(--color);
+
+        @media (max-width: 1020px) {
+            font-size: 80px;
+            line-height: 86px;
+        }
+    
+        @media (max-width: 630px) {
+            font-size: 50px;
+            line-height: 60px;
+        }
+    
+        @media (max-width: 500px) {
+            font-size: 40px;
+            line-height: 50px;
+        }
     }
 
     &__sort-block {
