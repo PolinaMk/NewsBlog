@@ -19,6 +19,9 @@ import n11 from "../assets/icons/storm.svg";
 import d13 from "../assets/icons/snowing-svgrepo-com.svg";
 
 import weatherSvg from "../assets/icons/day.svg"
+import { useSelector } from "react-redux";
+import { AppStorage } from "../redux/store";
+import { Language } from "../redux/language/reducer";
 
 export const WeatherIcons = {
   "01d": d01,
@@ -48,6 +51,7 @@ export const Weather = () => {
     const [errorMessage, setErrorMessage] = useState(false);
     const [error, setError] = useState<Error>();
     const [loading, setLoading] = useState<boolean>(false);
+    const { lang } = useSelector((store: AppStorage) => store.language)
 
 
     const getWeather = async (e) => {
@@ -77,7 +81,9 @@ export const Weather = () => {
 
     return <div className="weather">
         <div className="weather__header">
-            <h2 className="weather__title article__title">Weather</h2>
+            <h2 className="weather__title article__title">
+                {lang === Language.ENG ? 'Weather' : 'Погода'}
+            </h2>
             {loading && <div className="spinner-border text-secondary" role="status">
                 <span className="visually-hidden">Loading...</span>
             </div>}
@@ -85,11 +91,15 @@ export const Weather = () => {
                 <img className="weather__img" src={weatherSvg} alt="" />
             </div>
         </div>
-        <h5 className="weather__subtitle">Find Weather of your city</h5>
+        <h5 className="weather__subtitle">
+            {lang === Language.ENG ? 'Find Weather of your city' : 'Посмотрите погоду в твоём городе'}
+        </h5>
 
         <form className="weather__form" onSubmit={getWeather}>
             <input className="article__search-input weather__form-input form-control" onChange={(e) => setCity(e.target.value)} placeholder="City..."/>
-            <button className="weather__form-bth" type={"submit"}>Search</button>
+            <button className="weather__form-bth" type={"submit"}>
+                {lang === Language.ENG ? 'Search' : 'Поиск'}
+            </button>
         </form>
 
         {city && weather && <div className="weather__wrapper promo__wrapper">
@@ -106,7 +116,9 @@ export const Weather = () => {
 
             <p className="weather__city-name">{`${weather?.name}, ${weather?.sys?.country}`}</p>
 
-            <p className="weather__addition-info">Weather Info</p>
+            <p className="weather__addition-info">
+                {lang === Language.ENG ? 'Weather Info' : 'Информация о погоде'}
+            </p>
 
             <div className="weather__addition-info_wrapper">
                 <WeatherInfo name={isDay ? "sunset" : "sunrise"}
@@ -118,7 +130,9 @@ export const Weather = () => {
         </div>}
 
         {errorMessage && <div>
-            <p className="weather__addition-info weather__no-result">No such city</p>
+            <p className="weather__addition-info weather__no-result">
+                {lang === Language.ENG ? 'Sorry, we did not find this town' : 'Извините, мы не нашли этот город'}
+            </p>
         </div>}
 
     </div>

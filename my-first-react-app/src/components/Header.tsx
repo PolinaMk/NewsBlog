@@ -2,11 +2,25 @@ import { NavLink } from 'react-router-dom';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppStorage } from '../redux/store';
+import { changeLanguageAction } from '../redux/language/action';
+import { Language } from '../redux/language/reducer';
 
 
 export const Header: React.FC = () => {
     const { darkTheme, toggleTheme } = useContext(ThemeContext)
     const [burgerStatus, setBurgerStatus] = useState(false)
+    const { lang } = useSelector((store: AppStorage) => store.language)
+    const dispatch = useDispatch()
+
+    const changeLang = () => {
+        if (lang === Language.RU) {
+            dispatch(changeLanguageAction(Language.ENG))
+        } else {
+            dispatch(changeLanguageAction(Language.RU))
+        }
+    }
 
     const openBurger = () => {
         setBurgerStatus(true)
@@ -19,7 +33,7 @@ export const Header: React.FC = () => {
     useEffect(() => {
         document.documentElement.setAttribute(
         "data-theme",
-        darkTheme === 'dark' ? "dark" : "light"
+        darkTheme === "dark" ? "dark" : "light"
         );
     }, [darkTheme]);
 
@@ -39,13 +53,13 @@ export const Header: React.FC = () => {
                 </NavLink>
                 <div className='navbar__links'>
                     <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/'>
-                        Main
+                        {lang === Language.ENG ? 'Main' : 'Главная'}
                     </NavLink>
                     <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/articles'>
-                        Articles
+                        {lang === Language.ENG ? 'Articles' : 'Новости'}
                     </NavLink>
                      <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/create_article'>
-                        Create article
+                        {lang === Language.ENG ? 'Create article' : 'Добавить новость'}
                     </NavLink>
                 </div>
                 <button onClick={toggleTheme} className='navbar__toggle-btn'>
@@ -53,6 +67,14 @@ export const Header: React.FC = () => {
                         <MoonIcon className='navbar__toggle-icon'/>
                     ) : (
                         < SunIcon className='navbar__toggle-icon'/>
+                    )}
+                </button>
+
+                <button onClick={changeLang} className='navbar__toggle-btn'>
+                    {lang === Language.ENG ? (
+                        <p>ENG</p>
+                    ) : (
+                        <p>RU</p>
                     )}
                 </button>
 
@@ -69,17 +91,16 @@ export const Header: React.FC = () => {
                     </svg>
                     <div className='navbar__burger-links'>
                         <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/' onClick={closeBurger}>
-                            Main
+                           {lang === Language.ENG ? 'Main' : 'Главная'}
                         </NavLink>
                         <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/articles' onClick={closeBurger}>
-                            Articles
+                            {lang === Language.ENG ? 'Articles' : 'Новость'}
                         </NavLink>
                         <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/create_article' onClick={closeBurger}>
-                            Create article
+                            {lang === Language.ENG ? 'Create article' : 'Добавить новость'}
                         </NavLink>
                     </div>
                 </div>
-                {/* <div className={`navbar__burger-overlay ${burgerStatus ? 'navbar__burger__active' : ''}`} onClick={closeBurger}></div> */}
 
             </div>
         </nav>

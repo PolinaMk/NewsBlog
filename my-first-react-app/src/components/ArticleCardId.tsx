@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Article, getArticleById } from "../api/articleService"
+import { useSelector } from "react-redux";
+import { AppStorage } from "../redux/store";
+import { Language } from "../redux/language/reducer";
 
 export const ArticleCardId: React.FC = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const [article, setArticle] = useState<Article>()
+    const { lang } = useSelector((store: AppStorage) => store.language)
 
     const loadArticle = async () => {
         const article = await getArticleById(+id!)
@@ -21,7 +25,9 @@ export const ArticleCardId: React.FC = () => {
     }
 
     return <div className="articleId">
-        <button className="articleId__btn" onClick={goBack} >Go back</button>
+        <button className="articleId__btn" onClick={goBack}>
+            {lang === Language.ENG ? 'Go back' : 'Назад'}
+        </button>
         {article &&
             <div className="articleId__card">
                 <p className="articleId__data">{article.published_at}</p>
