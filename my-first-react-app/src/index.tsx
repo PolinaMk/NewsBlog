@@ -5,6 +5,11 @@ import { ACCESS_KEY, REFRESH_KEY, baseUrl } from './constants';
 import axios from 'axios';
 import { ThemeProvider } from './context/ThemeContext';
 
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
+import { QueryParamProvider } from 'use-query-params';
+import { BrowserRouter } from 'react-router-dom';
+import queryString from 'query-string';
+
 function redirectToLogin() {
     window.location.href = `/login?redirect=${encodeURIComponent(window.location.href.replace(window.location.origin, ""))}`
 }
@@ -59,7 +64,17 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <ThemeProvider>
-        <App />
-    </ThemeProvider>
+    <BrowserRouter>
+        <QueryParamProvider
+                adapter={ReactRouter6Adapter}
+                options={{
+                searchStringToObject: queryString.parse,
+                objectToSearchString: queryString.stringify,
+            }}
+        >
+            <ThemeProvider>
+                <App />
+            </ThemeProvider>
+        </QueryParamProvider>
+    </BrowserRouter>
 );

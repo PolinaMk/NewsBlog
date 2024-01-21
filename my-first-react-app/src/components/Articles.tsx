@@ -5,6 +5,7 @@ import { debounce } from "lodash"
 import { useSelector } from "react-redux";
 import { AppStorage } from "../redux/store";
 import { Language } from "../redux/language/reducer";
+import { useQueryParam, NumberParam, StringParam } from 'use-query-params';
 
 const now = new Date();
 const year = now.getFullYear();
@@ -22,26 +23,38 @@ let currentYear = `${year}-${'01'}-${'01'}`
 
 export const Articles: React.FC = () => {
     const [articles, setArticles] = useState<Article[]>([])
-    const [inputValue, setInputValue] = useState('');
     const [selectValue, setSelectValue] = useState('');
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<Error>()
-    const [limit, setLimit] = useState(10)
     const [offset, setOffset] = useState(0)
     const [total, setTotal] = useState(0)
     const [next, setNext] = useState('')
-    const [currentDate, setCurrentDate] = useState<any>(currentYear)
-    const [currentDateValue, setCurrentDateValue] = useState<any>('allNews')
+    const [currentDateValue, setCurrentDateValue] = useState<any>()
+
     const { lang } = useSelector((store: AppStorage) => store.language)
 
+    const [limitParam, setLimitParam] = useQueryParam('limit', NumberParam);
+    const [searchParam, setSearchParam] = useQueryParam('search', StringParam);
+    const [currentDateParam, setCurrentDateParam] = useQueryParam('updated_at_gte', StringParam);
+
+
+    const localStorage = window.localStorage;
+
+    if (!limitParam) {
+        setLimitParam(10)
+    }
+
+    if (currentDateParam === undefined) {
+        setCurrentDateParam(currentYear)
+    }
 
     const totalPage = useMemo(() => {
-        return Math.ceil(total / limit) || 1
-    }, [total, limit])
+        return Math.ceil(total / limitParam!) || 1
+    }, [total, limitParam!])
 
     const currentPage = useMemo(() => {
-        return offset / limit + 1
-    }, [offset, limit])
+        return offset / limitParam! + 1
+    }, [offset, limitParam!])
 
     const debouncedHandleSearch = useCallback(debounce(async (limitValue, inputValue, offset, currentDate) => {
         const articlesResp = await getArticles({ limit: limitValue, search: inputValue, offset: offset, updated_at_gte: currentDate})
@@ -54,7 +67,14 @@ export const Articles: React.FC = () => {
         const func = async () => {
             setLoading(true)
             try {
-                debouncedHandleSearch(limit, inputValue, offset, currentDate)
+                debouncedHandleSearch(limitParam, searchParam, offset, currentDateParam)
+
+                const savedDateLocal = localStorage.getItem("search-date");
+
+                if (!!savedDateLocal) {
+                    setCurrentDateValue(savedDateLocal);
+                }
+
                 setError(undefined)
             } catch (e: unknown) {
                 setArticles([])
@@ -64,42 +84,46 @@ export const Articles: React.FC = () => {
             }
         }
         func()
-    }, [selectValue, inputValue, offset, limit, currentDate])
+    }, [searchParam, offset, limitParam, currentDateParam, currentDateValue])
 
     const onPreviousClick = () => {
-        offset > 0 && setOffset(offset - limit)
+        offset > 0 && setOffset(offset - limitParam!)
     }
 
     const onNextClick = () => {
-        offset < limit * (totalPage - 1) && setOffset(offset + limit)
-        setOffset(offset + limit)
+        offset < limitParam! * (totalPage - 1) && setOffset(offset + limitParam!)
+        setOffset(offset + limitParam!)
     }
 
     const onSearchChange = (value: string) => {
-        setInputValue(value)
+        setSearchParam(value)
         setOffset(0)
     }
 
     const onCurrentDay = (value: string) => {
-        setCurrentDate(currentDay)
+        setCurrentDateParam(currentDay)
+        localStorage.setItem("search-date", value);
         setCurrentDateValue(value)
         setOffset(0)
     }
 
     const onCurrentMonth = (value: string) => {
-        setCurrentDate(currentMonth)
+        setCurrentDateParam(currentMonth)
+        localStorage.setItem("search-date", value);
         setCurrentDateValue(value)
         setOffset(0)
     }
 
     const onCurrentYear = (value: string) => {
-        setCurrentDate(currentYear)
+        setCurrentDateParam(currentYear)
+        localStorage.setItem("search-date", value);
         setCurrentDateValue(value)
         setOffset(0)
     }
 
     const onAllNews = (value: string) => {
-        setCurrentDate('')
+        setCurrentDateParam('')
+        localStorage.setItem("search-date", value);
         setCurrentDateValue(value)
         setOffset(0)
     }
@@ -119,7 +143,7 @@ export const Articles: React.FC = () => {
 
         <div className="article__sort-block">
             <div className="article__search-block mb-3">
-                <input type="text" className="article__search-input form-control" placeholder="Search" value={inputValue} onChange={(e) => onSearchChange(e.target.value)}/>
+                <input type="text" className="article__search-input form-control" placeholder="Search" value={searchParam!} onChange={(e) => onSearchChange(e.target.value)}/>
             </div>
             <div className="article__sort-time">
                 <div className={`article__radio-btn ${currentDateValue === 'day' ? 'article__radio-btn-active' : ''}`}>
@@ -182,7 +206,7 @@ export const Articles: React.FC = () => {
                 </span>
             </div>
 
-           <select className="article__pagination-select" value={limit} onChange={e => setLimit(+e.target.value) }>
+           <select className="article__pagination-select" value={limitParam!} onChange={e => setLimitParam(+e.target.value)}>
                 <option selected>
                     {lang === Language.ENG ? 'Select ordering' : 'Кол-во новостей'}
                 </option>
