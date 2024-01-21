@@ -1,6 +1,4 @@
 import React, { createContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { AppStorage } from "../redux/store";
 
 interface ContextProps {
   darkTheme: string;

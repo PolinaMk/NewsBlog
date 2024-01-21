@@ -60,10 +60,6 @@ body {
         list-style: none;
         column-gap: 50px;
 
-        // @media (max-width: 700px) {
-        //     column-gap: 35px;
-        // }
-
         @media (max-width: 800px) {
             display: none;
         }
@@ -198,7 +194,6 @@ body {
     margin-bottom: 140px;
 
     &__wrapper {
-        //background: #FFFFFF;
         background: var(--primary-color);
         border-radius: 40px;
         padding: 131px 0 62px 110px;
@@ -218,7 +213,6 @@ body {
         font-weight: 600;
         font-size: 90px;
         line-height: 96px;
-        //color: #1D1D1D;
         color: var(--color);
         max-width: 906px;
         position: absolute;
@@ -440,7 +434,6 @@ body {
         font-style: normal;
         font-weight: 700;
         line-height: 80px;
-        //color: $black;
         color: var(--color);
 
         @media (max-width: 1020px) {
@@ -574,7 +567,6 @@ body {
 
     &__card {
         border-radius: 16px;
-        //background: #FFF;
         background: var(--primary-color);
         transition: all 0.3s linear;
 
@@ -603,7 +595,6 @@ body {
 
     &__card-time {
         color: var(--secondary-color);
-        //color: $medium-gray;
         font-size: 16px;
         font-weight: 500;
         line-height: 24px;
@@ -611,7 +602,6 @@ body {
 
     &__card-title {
         color: var(--color);
-        //color: $black;
         font-size: 18px;
         font-weight: 600;
         line-height: 28px;

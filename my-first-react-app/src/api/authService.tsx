@@ -1,20 +1,17 @@
 import axios from "axios";
 import { baseUrl } from "../constants";
 import { Creds } from "../redux/auth/actions";
-import { getBasicHeaders } from "./utils";
 
 interface RegisterUserPostData {
     username: string,
     email: string,
     password: string,
-    course_group: number
 }
 
 export interface CustomUserCreate {
     id: number,
     username: string,
     email: string,
-    course_group: number
 }
 
 export interface TokenObtainPair {
@@ -29,7 +26,6 @@ export const authService = {
             username,
             email,
             password,
-            course_group: 3
         }, {
             headers: {
                 "Content-Type": "application/json"

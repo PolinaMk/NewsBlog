@@ -1,6 +1,6 @@
 import { ACCESS_KEY } from "../constants";
 
-export function getAccessHeaders() {
+export function getAccess() {
     const headers = new Headers();
     headers.set("Content-Type", "application/json");
 

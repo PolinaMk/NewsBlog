@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ACCESS_KEY, baseUrl } from "../constants"
+import { baseUrl } from "../constants"
 
 export interface Article {
     id: number | string,

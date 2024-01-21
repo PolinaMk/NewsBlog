@@ -1,6 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { WeatherInfo } from "./WeatherInfo";
+import { useSelector } from "react-redux";
+import { AppStorage } from "../redux/store";
+import { Language } from "../redux/language/reducer";
 
 import d01 from "../assets/icons/sunny.svg";
 import n01 from "../assets/icons/night.svg";
@@ -19,9 +22,6 @@ import n11 from "../assets/icons/storm.svg";
 import d13 from "../assets/icons/snowing-svgrepo-com.svg";
 
 import weatherSvg from "../assets/icons/day.svg"
-import { useSelector } from "react-redux";
-import { AppStorage } from "../redux/store";
-import { Language } from "../redux/language/reducer";
 
 export const WeatherIcons = {
   "01d": d01,

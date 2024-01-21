@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Article, getArticleById } from "../api/articleService"
 import { useSelector } from "react-redux";
 import { AppStorage } from "../redux/store";
