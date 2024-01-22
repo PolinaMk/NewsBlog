@@ -68,7 +68,7 @@ export const getArticleById = async (id: number): Promise<Article> => {
     }).then(response => response.data)
 }
 
-export const createArticle = async (props: ArticleCreateProps): Promise<Article> => {
+export const createArticle = async (props: ArticleCreateProps): Promise<any> => {
     return axios.post(`${baseUrl}/v4/articles/`, {
         ...props,
         id: 7
@@ -76,5 +76,18 @@ export const createArticle = async (props: ArticleCreateProps): Promise<Article>
         headers: {
             "Content-Type": "multipart/form-data"
         },
-    }).then(response => response.data)
+    })
+    .then(response => response.data)
+    .catch(function (error) {
+        if (error.response) {
+            if (error.response.status === 405) {
+                alert("Sorry we have problems with API")
+            }
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+    })
 }

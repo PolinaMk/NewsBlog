@@ -5,6 +5,7 @@ import { debounce } from "lodash"
 import { useSelector } from "react-redux";
 import { AppStorage } from "../redux/store";
 import { Language } from "../redux/language/reducer";
+import { useQueryParam, NumberParam, StringParam } from 'use-query-params';
 
 const now = new Date();
 const year = now.getFullYear();
@@ -22,26 +23,28 @@ let currentYear = `${year}-${'01'}-${'01'}`
 
 export const Articles: React.FC = () => {
     const [articles, setArticles] = useState<Article[]>([])
-    const [inputValue, setInputValue] = useState('');
-    const [selectValue, setSelectValue] = useState('');
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<Error>()
-    const [limit, setLimit] = useState(10)
     const [offset, setOffset] = useState(0)
     const [total, setTotal] = useState(0)
     const [next, setNext] = useState('')
-    const [currentDate, setCurrentDate] = useState<any>(currentYear)
-    const [currentDateValue, setCurrentDateValue] = useState<any>('allNews')
+    const [currentDateValue, setCurrentDateValue] = useState<any>()
+
     const { lang } = useSelector((store: AppStorage) => store.language)
 
+    const [limitParam, setLimitParam] = useQueryParam('limit', NumberParam);
+    const [searchParam, setSearchParam] = useQueryParam('search', StringParam);
+    const [currentDateParam, setCurrentDateParam] = useQueryParam('updated_at_gte', StringParam);
+
+    const localStorage = window.localStorage;
 
     const totalPage = useMemo(() => {
-        return Math.ceil(total / limit) || 1
-    }, [total, limit])
+        return Math.ceil(total / limitParam!) || 1
+    }, [total, limitParam!])
 
     const currentPage = useMemo(() => {
-        return offset / limit + 1
-    }, [offset, limit])
+        return offset / limitParam! + 1
+    }, [offset, limitParam!])
 
     const debouncedHandleSearch = useCallback(debounce(async (limitValue, inputValue, offset, currentDate) => {
         const articlesResp = await getArticles({ limit: limitValue, search: inputValue, offset: offset, updated_at_gte: currentDate})
@@ -54,7 +57,28 @@ export const Articles: React.FC = () => {
         const func = async () => {
             setLoading(true)
             try {
-                debouncedHandleSearch(limit, inputValue, offset, currentDate)
+                debouncedHandleSearch(limitParam, searchParam, offset, currentDateParam)
+
+                if (!limitParam) {
+                    setLimitParam(10)
+                }
+
+                if (currentDateParam === undefined) {
+                    setCurrentDateParam('')
+                }
+
+                if (!currentDateValue) {
+                    setCurrentDateValue('allNews')
+                }
+
+                const savedDateLocal = localStorage.getItem("search-date");
+                const savedDateLocalValue = localStorage.getItem("date");
+
+                if (!!savedDateLocal && !!savedDateLocalValue) {
+                    setCurrentDateValue(savedDateLocal);
+                    setCurrentDateParam(savedDateLocalValue)
+                }
+
                 setError(undefined)
             } catch (e: unknown) {
                 setArticles([])
@@ -64,44 +88,44 @@ export const Articles: React.FC = () => {
             }
         }
         func()
-    }, [selectValue, inputValue, offset, limit, currentDate])
+    }, [searchParam, offset, limitParam, currentDateParam, currentDateValue])
 
     const onPreviousClick = () => {
-        offset > 0 && setOffset(offset - limit)
+        offset > 0 && setOffset(offset - limitParam!)
     }
 
     const onNextClick = () => {
-        offset < limit * (totalPage - 1) && setOffset(offset + limit)
-        setOffset(offset + limit)
+        offset < limitParam! * (totalPage - 1) && setOffset(offset + limitParam!)
+        setOffset(offset + limitParam!)
     }
 
     const onSearchChange = (value: string) => {
-        setInputValue(value)
+        setSearchParam(value)
+        setOffset(0)
+    }
+
+    const saveDateState = (date, dateValue) => {
+        localStorage.setItem("date", date)
+        localStorage.setItem("search-date", dateValue);
+        setCurrentDateValue(dateValue)
+        setCurrentDateParam(date)
         setOffset(0)
     }
 
     const onCurrentDay = (value: string) => {
-        setCurrentDate(currentDay)
-        setCurrentDateValue(value)
-        setOffset(0)
+        saveDateState(currentDay, value)
     }
 
     const onCurrentMonth = (value: string) => {
-        setCurrentDate(currentMonth)
-        setCurrentDateValue(value)
-        setOffset(0)
+        saveDateState(currentMonth, value)
     }
 
     const onCurrentYear = (value: string) => {
-        setCurrentDate(currentYear)
-        setCurrentDateValue(value)
-        setOffset(0)
+        saveDateState(currentYear, value)
     }
 
     const onAllNews = (value: string) => {
-        setCurrentDate('')
-        setCurrentDateValue(value)
-        setOffset(0)
+        saveDateState('', value)
     }
 
 
@@ -119,32 +143,32 @@ export const Articles: React.FC = () => {
 
         <div className="article__sort-block">
             <div className="article__search-block mb-3">
-                <input type="text" className="article__search-input form-control" placeholder="Search" value={inputValue} onChange={(e) => onSearchChange(e.target.value)}/>
+                <input type="text" className="article__search-input form-control" placeholder="Search" value={searchParam!} onChange={(e) => onSearchChange(e.target.value)}/>
             </div>
             <div className="article__sort-time">
-                <div className={`article__radio-btn ${currentDateValue === 'day' ? 'article__radio-btn-active' : ''}`}>
-                    <input type="radio" name="topping" value='day' id="day" onClick={() => onCurrentDay('day')}/>
+                <div className='article__radio-btn'>
+                    <input type="radio" name="topping" value='day' id="day" onClick={() => onCurrentDay('day')} checked={currentDateValue === 'day'}/>
                     <label htmlFor="day">
                         {lang === Language.ENG ? 'Current day' : 'Сегодня'}
                     </label>
                 </div>
 
-                <div className={`article__radio-btn ${currentDateValue === 'month' ? 'article__radio-btn-active' : ''}`}>
-                    <input type="radio" name="topping" value="month" id="month" onClick={() => onCurrentMonth('month')}/>
+                <div className='article__radio-btn'>
+                    <input type="radio" name="topping" value="month" id="month" onClick={() => onCurrentMonth('month')} checked={currentDateValue === 'month'}/>
                     <label htmlFor="month">
                         {lang === Language.ENG ? 'Current month' : 'В этом месяце'}
                     </label>
                 </div>
 
-                <div className={`article__radio-btn ${currentDateValue === 'year' ? 'article__radio-btn-active' : ''}`}>
-                    <input type="radio" name="topping" value='year' id="year" onClick={() => onCurrentYear('year')}/>
+                <div className='article__radio-btn'>
+                    <input type="radio" name="topping" value='year' id="year" onClick={() => onCurrentYear('year')} checked={currentDateValue === 'year'}/>
                     <label htmlFor="year">
                         {lang === Language.ENG ? 'Current year' : 'В этом году'}
                     </label>
                 </div>
 
-                <div className={`article__radio-btn ${currentDateValue === 'allNews' ? 'article__radio-btn-active' : ''}`}>
-                    <input type="radio" name="topping" value='allNews' id="allNews" onClick={() => onAllNews('allNews')}/>
+                <div className='article__radio-btn'>
+                    <input type="radio" name="topping" value='allNews' id="allNews" onClick={() => onAllNews('allNews')} checked={currentDateValue === 'allNews'} />
                     <label htmlFor="allNews">
                         {lang === Language.ENG ? 'All news' : 'Все новости'}
                     </label>
@@ -157,6 +181,9 @@ export const Articles: React.FC = () => {
             {articles.map((article) => {
                 return <ArticleCard key={article.id} article={article} />
             })}
+            {articles.length === 0 && <p className="article__pagination-number">
+                {lang === Language.ENG ? 'There are no articles' : 'Нет статей'}
+            </p>}
         </div>
 
         <div className="article__pagination">
@@ -182,7 +209,7 @@ export const Articles: React.FC = () => {
                 </span>
             </div>
 
-           <select className="article__pagination-select" value={limit} onChange={e => setLimit(+e.target.value) }>
+           <select className="article__pagination-select" value={limitParam!} onChange={e => setLimitParam(+e.target.value)}>
                 <option selected>
                     {lang === Language.ENG ? 'Select ordering' : 'Кол-во новостей'}
                 </option>

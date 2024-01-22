@@ -51,6 +51,7 @@ export const Header: React.FC = () => {
                         </defs>
                     </svg>
                 </NavLink>
+
                 <div className='navbar__links'>
                     <NavLink className={({ isActive }) => `navbar__link nav-link ${isActive ? 'active' : ''}`} to='/'>
                         {lang === Language.ENG ? 'Main' : 'Главная'}
@@ -62,6 +63,7 @@ export const Header: React.FC = () => {
                         {lang === Language.ENG ? 'Create article' : 'Добавить новость'}
                     </NavLink>
                 </div>
+
                 <button onClick={toggleTheme} className='navbar__toggle-btn'>
                     {darkTheme ? (
                         <MoonIcon className='navbar__toggle-icon'/>

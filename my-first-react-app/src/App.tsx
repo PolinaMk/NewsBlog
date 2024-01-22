@@ -10,8 +10,7 @@ import { ArticleCreate } from "./components/ArticleCreate";
 import { Footer } from "./components/Footer";
 
 export const App = () => {
-  return <BrowserRouter>
-    <Provider store={store}>
+  return <Provider store={store}>
       <Header />
       <main className="container__main">
         <Routes>
@@ -23,5 +22,4 @@ export const App = () => {
       </main>
       <Footer/>
     </Provider>
-  </BrowserRouter>
 }
