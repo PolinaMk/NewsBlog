@@ -23,7 +23,6 @@ let currentYear = `${year}-${'01'}-${'01'}`
 
 export const Articles: React.FC = () => {
     const [articles, setArticles] = useState<Article[]>([])
-    const [selectValue, setSelectValue] = useState('');
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<Error>()
     const [offset, setOffset] = useState(0)
@@ -46,6 +45,10 @@ export const Articles: React.FC = () => {
 
     if (currentDateParam === undefined) {
         setCurrentDateParam(currentYear)
+    }
+
+    if (!currentDateValue) {
+        setCurrentDateValue('year')
     }
 
     const totalPage = useMemo(() => {

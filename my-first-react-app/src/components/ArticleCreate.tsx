@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import { useSelector } from "react-redux";
 import { AppStorage } from "../redux/store";
 import { Language } from "../redux/language/reducer";
+import { createArticle } from '../api/articleService';
 
 
 interface IForm {
@@ -49,8 +50,8 @@ export const ArticleCreate: React.FC = () => {
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
         try {
-            //createArticle({ ...data, image_url: file! })
-            alert(`Article: ${data.title} - has been added`)
+            createArticle({ ...data, image_url: file! })
+            //alert(`Article: ${data.title} - has been added`)
             navigate('/articles')
         } catch (e: any) {
             alert(e?.message)
