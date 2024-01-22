@@ -36,20 +36,7 @@ export const Articles: React.FC = () => {
     const [searchParam, setSearchParam] = useQueryParam('search', StringParam);
     const [currentDateParam, setCurrentDateParam] = useQueryParam('updated_at_gte', StringParam);
 
-
     const localStorage = window.localStorage;
-
-    if (!limitParam) {
-        setLimitParam(10)
-    }
-
-    if (currentDateParam === undefined) {
-        setCurrentDateParam(currentYear)
-    }
-
-    if (!currentDateValue) {
-        setCurrentDateValue('year')
-    }
 
     const totalPage = useMemo(() => {
         return Math.ceil(total / limitParam!) || 1
@@ -72,10 +59,24 @@ export const Articles: React.FC = () => {
             try {
                 debouncedHandleSearch(limitParam, searchParam, offset, currentDateParam)
 
-                const savedDateLocal = localStorage.getItem("search-date");
+                if (!limitParam) {
+                    setLimitParam(10)
+                }
 
-                if (!!savedDateLocal) {
+                if (currentDateParam === undefined) {
+                    setCurrentDateParam('')
+                }
+
+                if (!currentDateValue) {
+                    setCurrentDateValue('allNews')
+                }
+
+                const savedDateLocal = localStorage.getItem("search-date");
+                const savedDateLocalValue = localStorage.getItem("date");
+
+                if (!!savedDateLocal && !!savedDateLocalValue) {
                     setCurrentDateValue(savedDateLocal);
+                    setCurrentDateParam(savedDateLocalValue)
                 }
 
                 setError(undefined)
@@ -103,32 +104,28 @@ export const Articles: React.FC = () => {
         setOffset(0)
     }
 
-    const onCurrentDay = (value: string) => {
-        setCurrentDateParam(currentDay)
-        localStorage.setItem("search-date", value);
-        setCurrentDateValue(value)
+    const saveDateState = (date, dateValue) => {
+        localStorage.setItem("date", date)
+        localStorage.setItem("search-date", dateValue);
+        setCurrentDateValue(dateValue)
+        setCurrentDateParam(date)
         setOffset(0)
+    }
+
+    const onCurrentDay = (value: string) => {
+        saveDateState(currentDay, value)
     }
 
     const onCurrentMonth = (value: string) => {
-        setCurrentDateParam(currentMonth)
-        localStorage.setItem("search-date", value);
-        setCurrentDateValue(value)
-        setOffset(0)
+        saveDateState(currentMonth, value)
     }
 
     const onCurrentYear = (value: string) => {
-        setCurrentDateParam(currentYear)
-        localStorage.setItem("search-date", value);
-        setCurrentDateValue(value)
-        setOffset(0)
+        saveDateState(currentYear, value)
     }
 
     const onAllNews = (value: string) => {
-        setCurrentDateParam('')
-        localStorage.setItem("search-date", value);
-        setCurrentDateValue(value)
-        setOffset(0)
+        saveDateState('', value)
     }
 
 
@@ -149,29 +146,29 @@ export const Articles: React.FC = () => {
                 <input type="text" className="article__search-input form-control" placeholder="Search" value={searchParam!} onChange={(e) => onSearchChange(e.target.value)}/>
             </div>
             <div className="article__sort-time">
-                <div className={`article__radio-btn ${currentDateValue === 'day' ? 'article__radio-btn-active' : ''}`}>
-                    <input type="radio" name="topping" value='day' id="day" onClick={() => onCurrentDay('day')}/>
+                <div className='article__radio-btn'>
+                    <input type="radio" name="topping" value='day' id="day" onClick={() => onCurrentDay('day')} checked={currentDateValue === 'day'}/>
                     <label htmlFor="day">
                         {lang === Language.ENG ? 'Current day' : 'Сегодня'}
                     </label>
                 </div>
 
-                <div className={`article__radio-btn ${currentDateValue === 'month' ? 'article__radio-btn-active' : ''}`}>
-                    <input type="radio" name="topping" value="month" id="month" onClick={() => onCurrentMonth('month')}/>
+                <div className='article__radio-btn'>
+                    <input type="radio" name="topping" value="month" id="month" onClick={() => onCurrentMonth('month')} checked={currentDateValue === 'month'}/>
                     <label htmlFor="month">
                         {lang === Language.ENG ? 'Current month' : 'В этом месяце'}
                     </label>
                 </div>
 
-                <div className={`article__radio-btn ${currentDateValue === 'year' ? 'article__radio-btn-active' : ''}`}>
-                    <input type="radio" name="topping" value='year' id="year" onClick={() => onCurrentYear('year')}/>
+                <div className='article__radio-btn'>
+                    <input type="radio" name="topping" value='year' id="year" onClick={() => onCurrentYear('year')} checked={currentDateValue === 'year'}/>
                     <label htmlFor="year">
                         {lang === Language.ENG ? 'Current year' : 'В этом году'}
                     </label>
                 </div>
 
-                <div className={`article__radio-btn ${currentDateValue === 'allNews' ? 'article__radio-btn-active' : ''}`}>
-                    <input type="radio" name="topping" value='allNews' id="allNews" onClick={() => onAllNews('allNews')}/>
+                <div className='article__radio-btn'>
+                    <input type="radio" name="topping" value='allNews' id="allNews" onClick={() => onAllNews('allNews')} checked={currentDateValue === 'allNews'} />
                     <label htmlFor="allNews">
                         {lang === Language.ENG ? 'All news' : 'Все новости'}
                     </label>
@@ -184,6 +181,9 @@ export const Articles: React.FC = () => {
             {articles.map((article) => {
                 return <ArticleCard key={article.id} article={article} />
             })}
+            {articles.length === 0 && <p className="article__pagination-number">
+                {lang === Language.ENG ? 'There are no such articles' : 'Нет таких статей'}
+            </p>}
         </div>
 
         <div className="article__pagination">

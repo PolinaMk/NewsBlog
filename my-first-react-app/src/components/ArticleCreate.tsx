@@ -51,7 +51,6 @@ export const ArticleCreate: React.FC = () => {
     const onSubmit: SubmitHandler<IForm> = (data) => {
         try {
             createArticle({ ...data, image_url: file! })
-            //alert(`Article: ${data.title} - has been added`)
             navigate('/articles')
         } catch (e: any) {
             alert(e?.message)
