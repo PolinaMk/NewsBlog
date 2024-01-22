@@ -66,7 +66,7 @@ export const ArticleCreate: React.FC = () => {
 
             <div className="createArticle__field createArticle__field-file">
                 <label className="createArticle__field-title form-label">
-                    {lang === Language.ENG ? 'Image' : 'Фотография'}
+                    {lang === Language.ENG ? 'Image ' : 'Фотография '}
                 </label>
                 {touchedFields.image_url && errors.image_url && <div className="form-text text-danger">Please add image</div>}
                 <input className={`article__search-input createArticle__file-select form-control ${touchedFields.image_url && errors.image_url ? 'createArticle__search-input_red' : ''}`} type="file" accept=".ipeg,.jpg,.png" onChange={onFileChange} />
@@ -78,7 +78,7 @@ export const ArticleCreate: React.FC = () => {
 
             <div className="createArticle__field">
                 <label className="createArticle__field-title form-label"><p>
-                    {lang === Language.ENG ? 'Title' : 'Заголовок'}
+                    {lang === Language.ENG ? 'Title ' : 'Заголовок '}
                     <span className='createArticle__field-required'>*</span></p>
                     {touchedFields.title && errors.title && <div className="createArticle__required">
                     <svg className='createArticle__required-svg' width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -91,7 +91,7 @@ export const ArticleCreate: React.FC = () => {
 
             <div className="createArticle__field">
                 <label className="createArticle__field-title form-label"><p>
-                    {lang === Language.ENG ? 'News url' : 'Ссылка на новость'}
+                    {lang === Language.ENG ? 'News url ' : 'Ссылка на новость '}
                     <span className='createArticle__field-required'>*</span></p>
                     <div className='createArticle__required-wrapper'>
                         {touchedFields.url && errors.url && <div className="createArticle__required">
@@ -114,7 +114,7 @@ export const ArticleCreate: React.FC = () => {
 
             <div className="createArticle__field">
                 <label className="createArticle__field-title form-label"><p>
-                    {lang === Language.ENG ? 'News topic' : 'Тема новости'}
+                    {lang === Language.ENG ? 'News topic ' : 'Тема новости '}
                     <span className='createArticle__field-required'>*</span></p>
                     {touchedFields.news_site && errors.news_site && <div className="createArticle__required">
                     <svg className='createArticle__required-svg' width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -127,7 +127,7 @@ export const ArticleCreate: React.FC = () => {
 
             <div className="createArticle__field">
                 <label className="createArticle__field-title form-label"><p>
-                    {lang === Language.ENG ? 'Summary' : 'Основной текст'}
+                    {lang === Language.ENG ? 'Summary ' : 'Основной текст '}
                     <span className='createArticle__field-required'>*</span></p>
                     {touchedFields.summary && errors.summary && <div className="createArticle__required">
                     <svg className='createArticle__required-svg' width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">

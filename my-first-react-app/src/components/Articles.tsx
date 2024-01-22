@@ -182,7 +182,7 @@ export const Articles: React.FC = () => {
                 return <ArticleCard key={article.id} article={article} />
             })}
             {articles.length === 0 && <p className="article__pagination-number">
-                {lang === Language.ENG ? 'There are no such articles' : 'Нет таких статей'}
+                {lang === Language.ENG ? 'There are no articles' : 'Нет статей'}
             </p>}
         </div>
 
